@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const { AgentDoc } = require("../../schemas");
 
 Router.post("/:aid", (req, res, next) => {
-  const { oldPassword, newPassword } = req.body;
+  const { oldPasswordofuser, newPasswordofuser } = req.body;
   AgentDoc.findOne({ _id: req.params.aid })
     .then(async (user) => {
       //const result = await bcrypt.compare(oldPassword, user.password);
