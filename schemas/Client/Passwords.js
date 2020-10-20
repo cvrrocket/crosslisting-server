@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+let mongoose = require("mongoose");
+let Schema = mongoose.Schema;
 
 const PasswordSchema = new Schema({
   website: {
@@ -20,7 +20,7 @@ const WebsitePasswordsSchema = new Schema({
   userId: {
     type: String,
     required: [true, "User Id is required."],
-    unique: [true, "UserId is already used"],
+    unique: [true, "UserId is already in use"],
   },
   passwords: [PasswordSchema],
 });
