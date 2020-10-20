@@ -8,7 +8,10 @@ Router.use("/forgotpassword", require("./Authentication/forgotpassword"));
 // Token verification
 Router.use((req, res, next) => {
   const token = req.headers["x-access-token"];
-  if (!token) return res.status(403).send({ msg: "Token not provided!" });
+  if (!token)
+    return res
+      .status(403)
+      .send({ msg: "Token not provided or some error occurred!" });
   jwt.verify(token, process.env.SALT, (err, client) => {
     if (err) {
       return res.status(500).send({ msg: "Failed to authenticate token." });
