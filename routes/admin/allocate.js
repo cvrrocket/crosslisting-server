@@ -23,11 +23,11 @@ Router.post("/allocate/", (req, res, next) => {
     { new: true }
   )
     .then((client) => {
-      AgentDoc.findOne({ _id: agentid }, { noOfClients: 1 })
+      ClientDoc.findOne({ _id: agentid }, { noOfClients: 1 })
         .then((count) => {
           console.log(count);
           AgentDoc.findByIdAndUpdate(agentid, {
-            $set: { noOfClients: count.noOfClients + 1 },
+            $push: { noOfClients: count.noOfClients + 1 },
           }).catch(next);
         })
         .catch(next);
@@ -36,7 +36,7 @@ Router.post("/allocate/", (req, res, next) => {
     .catch(next);
 });
 
-Router.delete("/deallocate/:clientid", (req, res, next) => {
+Router.delete("/deallocateuser/:clientid/:spaceid", (req, res, next) => {
   const { clientid } = req.params;
   const agentid = req.headers.agentid;
   ClientDoc.findByIdAndUpdate(
