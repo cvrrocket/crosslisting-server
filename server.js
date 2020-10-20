@@ -43,53 +43,7 @@ module.exports = { gettedImage };
 
 const app = express();
 
-var server = app.listen(8000);
-var io = require("socket.io").listen(server);
-//io.set("origins", "*:*");
-app.use(siofu.router);
-app.use(cors());
-app.use(logger("dev"));
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use("/assets", express.static("assets"));
-app.use(express.static(path.join(__dirname, "build")));
-
-app.use("/api/client", require("./routes/client/client"));
-app.use("/api/admin", require("./routes/admin/admin"));
-app.use("/api/agent", require("./routes/agent/agent"));
-app.use("/images", require("./images"));
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
-/* Error Handling */
-app.use(
-  (err, req, res, next) => console.log(err) || res.status(200).send({ err })
-);
-
-// DO NOT REMOVE: creates assets folder if not created.
-if (!fs.existsSync("./assets")) {
-  fs.mkdirSync("./assets");
-}
-
-const users = {};
-const uploaddone = {};
-const keys = [
-  "default_image",
-  "brand_image",
-  "model_image",
-  "side1_image",
-  "side2_image",
-  "front_image",
-  "back_image",
-  "condition1_image",
-  "condition2_image",
-  "condition3_image",
-  "condition4_image",
-  "condition5_image",
-];
+v
 //Socket handling and connection added for faster images upload and response
 io.on("connection", function (socket) {
   //console.log("connection is successful" + " " + socket.id);
