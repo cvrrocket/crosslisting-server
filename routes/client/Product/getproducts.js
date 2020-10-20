@@ -1,7 +1,7 @@
 const Router = require("express").Router();
 const { ProductDoc } = require("../../../schemas");
 
-Router.get("/:productid", (req, res, next) => {
+Router.get("/:productid/:transid", (req, res, next) => {
   const { _id } = req.client._doc;
   const { productid } = req.params;
   ProductDoc.findOne(
