@@ -25,11 +25,9 @@ Router.post("/", async (req, res, next) => {
   } catch (err) {
     console.log("err");
     if (err.code === 11000)
-      return res
-        .status(401)
-        .send({
-          err: "Email is already registered. Try with another email-id",
-        });
+      return res.status(401).send({
+        err: "Email is already registered. Try with another email-id",
+      });
     next(err, req, res);
     //res.json({ message: err });
   }
@@ -68,29 +66,37 @@ Router.get("/trans/charts", async (req, res, next) => {
     RateDoc.find()
       .then((rates) => {
         ratecard.push(rates[0].Rates[rates[0].Rates.length - 1]);
-        fetchtrans.map((ft, i) => {
-          if (ft.amount == 100) {
+
+        //Efficient way to loop through, faster response time
+        for (var i = 0; i < fetchtrans.length; i++) {
+          if (fetchtrans[i].amount == 100) {
             trans["initial"] += 1;
           }
           if (
-            ft.amount == ratecard[0].basic / 100 &&
-            ft.receipt_url[0] != "h"
+            fetchtrans[i].amount == ratecard[0].basic / 100 &&
+            fetchtrans[i].receipt_url[0] != "h"
           ) {
             trans["basic"] += 1;
           }
           if (
-            ft.amount == ratecard[0].advance / 100 &&
-            ft.receipt_url[0] != "h"
+            fetchtrans[i].amount == ratecard[0].advance / 100 &&
+            fetchtrans[i].receipt_url[0] != "h"
           ) {
             trans["advance"] += 1;
           }
-          if (ft.amount == ratecard[0].list / 100 && ft.receipt_url[0] != "h") {
+          if (
+            fetchtrans[i].amount == ratecard[0].list / 100 &&
+            fetchtrans[i].receipt_url[0] != "h"
+          ) {
             trans["list"] += 1;
           }
-          if (ft.amount == 1 && ft.receipt_url[0] == "h") {
+          if (
+            fetchtrans[i].amount == 1 &&
+            fetchtrans[i].receipt_url[0] == "h"
+          ) {
             trans["receipted"] += 1;
           }
-        });
+        }
         trans["initialamt"] = trans["initial"] * 100;
         trans["basicamt"] = (trans["basic"] * ratecard[0].basic) / 100;
         trans["advanceamt"] = (trans["advance"] * ratecard[0].advance) / 100;
@@ -109,18 +115,18 @@ Router.get("/trans/monthly/charts", async (req, res, next) => {
     const { _id } = req.client._doc;
     const fetchtrans = await TransactionDoc.find({ userId: _id });
     var months = {
-      "0": 0,
-      "1": 0,
-      "2": 0,
-      "3": 0,
-      "4": 0,
-      "5": 0,
-      "6": 0,
-      "7": 0,
-      "8": 0,
-      "9": 0,
-      "10": 0,
-      "11": 0,
+      0: 0,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 0,
+      7: 0,
+      8: 0,
+      9: 0,
+      10: 0,
+      11: 0,
     }; //maps
     fetchtrans.map((ft, i) => {
       let date = ft.date.getMonth();
@@ -140,7 +146,8 @@ Router.get("/prod/charts", async (req, res, next) => {
     profits = [];
     avg = 0;
     productData[0].products.map((p, i) => {
-      let profit = p.price - p.shippingFees; //Profit = Product sold - shipping fee - ebay - additional fee - paypal fee
+      let additional = 0.98; //static for now, create route to obtain it dynamically
+      let profit = p.price - p.shippingFees + additional; //Profit = (Product sold - shipping fee - ebay - additional fee - paypal fee)+additional costs
       profits.push({ profit: profit, id: p._id });
       avg += profit;
     });
@@ -178,8 +185,8 @@ Router.post("/prod/time/charts", async (req, res, next) => {
     var selectedDate = Number(date.date.toString().split("-")[2]);
     var selectedMonth = Number(date.date.toString().split("-")[1]);
     var selectedYear = Number(date.date.toString().split("-")[0]);
-    var cnt = { "0": 0, "1": 0, "2": 0, "3": 0, "4": 0 };
-    var amt = { "0": 0, "1": 0, "2": 0, "3": 0, "4": 0 };
+    var cnt = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 };
+    var amt = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 };
     var totalMoney = 0;
 
     var noOfProducts = productData[0].products.length;
