@@ -7,6 +7,6 @@ Router.use("/agent", require("./agents"));
 Router.use("/client", require("./clients"));
 Router.use("/payment", require("./payment"));
 Router.use("/product", require("./product"));
-Router.use("/template", require("./template"));
+Router.use("/templatestructute", require("./template"));
 
 module.exports = Router;
