@@ -53,9 +53,9 @@ const feilds = [
 
 Router.post("/", uploadFile.fields(feilds), async (req, res, next) => {
   const { _id } = req.client._doc;
-  //const img = gettedImage(_id);
-  //console.log(img);
-  // console.log(req.body);
+  const img = gettedImage(_id);
+  console.log(img);
+  console.log(req.body);
   req.body.images = {};
   //add routine
 
@@ -83,28 +83,28 @@ Router.post("/", uploadFile.fields(feilds), async (req, res, next) => {
     });
   }
 
-  // var cnt = 0;
+  var cnt = 0;
 
-  // if (req.body.ebayc == "true") {
-  //   console.log(req.body.ebayc);
-  //   cnt++;
-  //   console.log(cnt);
-  // }
-  // if (req.body.poshmarkc == "true") {
-  //   console.log(req.body.poshmarkc);
-  //   cnt++;
-  //   console.log(cnt);
-  // }
-  // if (req.body.mercaric == "true") {
-  //   console.log(req.body.mercaric);
-  //   cnt++;
-  //   console.log(cnt);
-  // }
-  // JSON.parse(req.body.others).map((obj, i) => {
-  //   if (obj.status == true) {
-  //     cnt++;
-  //   }
-  // });
+  if (req.body.ebayc == "true") {
+    console.log(req.body.ebayc);
+    cnt++;
+    console.log(cnt);
+  }
+  if (req.body.poshmarkc == "true") {
+    console.log(req.body.poshmarkc);
+    cnt++;
+    console.log(cnt);
+  }
+  if (req.body.mercaric == "true") {
+    console.log(req.body.mercaric);
+    cnt++;
+    console.log(cnt);
+  }
+  JSON.parse(req.body.others).map((obj, i) => {
+    if (obj.status == true) {
+      cnt++;
+    }
+  });
 
   var rate1 = 0,
     rate2 = 0,
@@ -149,7 +149,11 @@ Router.post("/", uploadFile.fields(feilds), async (req, res, next) => {
           TransactionDoc.create(transaction)
             .then((result) => {
               console.log(result);
-              //res.json({success:true,msg:"Payment successful",receipt_url:transaction.receipt_url})
+              res.json({
+                success: true,
+                msg: "Payment successful",
+                receipt_url: transaction.receipt_url,
+              });
             })
             .catch(next);
 
