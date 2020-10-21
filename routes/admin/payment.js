@@ -7,12 +7,12 @@ Router.get("/getpayments/:userId", (req, res, next) => {
   let _id = req.params.userId;
   TransactionDoc.find({ userId: _id })
     .then((result) => {
-      res.send(result);
+      res.send(result.title);
     })
     .catch(next);
 });
 
-Router.post("/makepayment", async (req, res, next) => {
+Router.post("/makepayments", async (req, res, next) => {
   let { customer_id, amount } = req.body;
   let stripe_customer_id;
   await ClientDoc.findOne({ _id: customer_id }, { savedCards: 1 })
@@ -30,9 +30,9 @@ Router.post("/makepayment", async (req, res, next) => {
       shipping: {
         name: "customer",
         address: {
-          line1: "510 Townsend St",
+          line1: "225 Town Street",
           postal_code: "98140",
-          city: "San Francisco",
+          city: "Florida",
           state: "CA",
           country: "US",
         },
@@ -40,7 +40,7 @@ Router.post("/makepayment", async (req, res, next) => {
     });
     let transaction = {
       userId: customer_id,
-      amount: charge.amount / 100,
+      amount: charge.amount / 1000,
       receipt_url: charge.receipt_url,
       status: charge.status,
       receipt_no: charge.receipt_number,
@@ -56,7 +56,7 @@ Router.post("/makepayment", async (req, res, next) => {
         console.log(result);
         res.json({
           success: true,
-          msg: "Payment successful",
+          msg: "Payment successful,Thank you",
           receipt_url: transaction.receipt_url,
           date: result.date,
         });
@@ -75,7 +75,7 @@ Router.post("/makepayment", async (req, res, next) => {
     console.log(error);
     if (
       error.message ==
-      "Your card was declined. This transaction requires authentication."
+      "Your card was declined. This transaction requires authentication to our databases"
     ) {
       return res.json({ status: false, msg: err.message });
     } else {
